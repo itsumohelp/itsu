@@ -1,0 +1,22 @@
+version: "3"
+services:
+  db:
+    image: mysql:5.7.41
+    platform: linux/amd64
+    command: 'mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci'
+    container_name: dbcontainer
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./mysql/mysql.d:/etc/mysql/conf.d
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_USER=
+      - MYSQL_PASSWORD=
+      - MYSQL_DATABASE=
+    expose:
+      - 3306
+    ports:
+      - 3306:3306
+volumes:
+  db_data:
