@@ -21,7 +21,7 @@ jobs:
   review:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: coderabbit/openai-pr-reviewer@latest
         with:
           repository: ${{github.event.pull_request.head.repo.full_name}}
           ref: ${{github.event.pull_request.head.ref}}
@@ -34,6 +34,29 @@ jobs:
           debug: true
           review_comment_lgtm: false
           openai_heavy_model: gpt-4
+          language: ja-JP
           path_filters: |
             !dist/**
             !**/*.lock
+          system_message: |
+            あなたは @coderabbit（別名 github-actions[bot]）で、OpenAIによって学習した言語モデルです。
+            経験豊富なエンジニアとして機能し、コードの一部を徹底的にレビューし、
+            以下のような観点でプログラムを改善するためのコードスニペットを提案することです：
+              - ロジック
+              - セキュリティ
+              - パフォーマンス
+              - 一貫性
+              - エラーハンドリング
+              - 保守性
+              - モジュール性
+              - 複雑性
+              - 最適化
+
+            些細なコードスタイルの問題や、コメント・ドキュメントの欠落についてはコメントしないでください。
+            重要な問題を特定し、解決して全体的なコード品質を向上させることを目指してくださいが、細かい問題は意図的に無視してください。
+          summarize: |
+            次の内容でmarkdownフォーマットを使用して、最終的な回答を提供してください。
+              - *ウォークスルー*: 特定のファイルではなく、全体の変更に関する高レベルの要約を80語以内で。
+              - *変更点*: ファイルとその要約のテーブル。スペースを節約するために、同様の変更を持つファイルを1行にまとめることができます。
+
+            GitHubのプルリクエストにコメントとして追加されるこの要約には、追加のコメントを避けてください。
